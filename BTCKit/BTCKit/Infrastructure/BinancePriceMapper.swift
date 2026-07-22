@@ -16,10 +16,10 @@ public enum BinancePriceMapper {
         }
 
         guard let decoded = try? JSONDecoder().decode(Response.self, from: data),
-              Decimal(string: decoded.price) != nil else {
+              let usd = Decimal(string: decoded.price) else {
             throw Error.invalidData
         }
 
-        return BTCPrice(usd: 0, timestamp: currentDate)
+        return BTCPrice(usd: usd, timestamp: currentDate)
     }
 }

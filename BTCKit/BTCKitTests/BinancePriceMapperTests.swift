@@ -26,6 +26,14 @@ final class BinancePriceMapperTests: XCTestCase {
         }
     }
     
+    func test_map_deliversPriceOn200HTTPResponseWithValidJSON() throws {
+        let currentDate = Date(timeIntervalSince1970: 1706130420)
+        
+        let price = try BinancePriceMapper.map(validPriceJSON(), from: HTTPURLResponse(statusCode: 200), currentDate: currentDate)
+        
+        XCTAssertEqual(price, BTCPrice(usd: Decimal(string: "45000.50")!, timestamp: currentDate))
+    }
+    
     private func validPriceJSON() -> Data {
         Data("{\"symbol\":\"BTCUSDT\",\"price\":\"45000.50\"}".utf8)
     }
