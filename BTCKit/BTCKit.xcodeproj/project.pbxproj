@@ -8,6 +8,7 @@
 
 /* Begin PBXFileReference section */
 		3B9F798E2FD6FFD3003FAFE4 /* BTCKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BTCKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6766402F30107D5C00850BEA /* BTCKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BTCKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -16,10 +17,22 @@
 			path = BTCKit;
 			sourceTree = "<group>";
 		};
+		6766403030107D5C00850BEA /* BTCKitTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = BTCKitTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		3B9F798B2FD6FFD3003FAFE4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6766402C30107D5C00850BEA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -33,6 +46,7 @@
 			isa = PBXGroup;
 			children = (
 				3B9F79902FD6FFD3003FAFE4 /* BTCKit */,
+				6766403030107D5C00850BEA /* BTCKitTests */,
 				3B9F798F2FD6FFD3003FAFE4 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +55,7 @@
 			isa = PBXGroup;
 			children = (
 				3B9F798E2FD6FFD3003FAFE4 /* BTCKit.framework */,
+				6766402F30107D5C00850BEA /* BTCKitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -81,6 +96,28 @@
 			productReference = 3B9F798E2FD6FFD3003FAFE4 /* BTCKit.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		6766402E30107D5C00850BEA /* BTCKitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6766403530107D5C00850BEA /* Build configuration list for PBXNativeTarget "BTCKitTests" */;
+			buildPhases = (
+				6766402B30107D5C00850BEA /* Sources */,
+				6766402C30107D5C00850BEA /* Frameworks */,
+				6766402D30107D5C00850BEA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				6766403030107D5C00850BEA /* BTCKitTests */,
+			);
+			name = BTCKitTests;
+			packageProductDependencies = (
+			);
+			productName = BTCKitTests;
+			productReference = 6766402F30107D5C00850BEA /* BTCKitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -88,11 +125,14 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2630;
+				LastSwiftUpdateCheck = 2620;
 				LastUpgradeCheck = 2630;
 				TargetAttributes = {
 					3B9F798D2FD6FFD3003FAFE4 = {
 						CreatedOnToolsVersion = 26.3;
+					};
+					6766402E30107D5C00850BEA = {
+						CreatedOnToolsVersion = 26.2;
 					};
 				};
 			};
@@ -111,6 +151,7 @@
 			projectRoot = "";
 			targets = (
 				3B9F798D2FD6FFD3003FAFE4 /* BTCKit */,
+				6766402E30107D5C00850BEA /* BTCKitTests */,
 			);
 		};
 /* End PBXProject section */
@@ -123,10 +164,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6766402D30107D5C00850BEA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		3B9F798A2FD6FFD3003FAFE4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6766402B30107D5C00850BEA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -334,6 +389,47 @@
 			};
 			name = Release;
 		};
+		6766403330107D5C00850BEA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = cwelim.BTCKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6766403430107D5C00850BEA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = cwelim.BTCKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -351,6 +447,15 @@
 			buildConfigurations = (
 				3B9F79962FD6FFD3003FAFE4 /* Debug */,
 				3B9F79972FD6FFD3003FAFE4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6766403530107D5C00850BEA /* Build configuration list for PBXNativeTarget "BTCKitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6766403330107D5C00850BEA /* Debug */,
+				6766403430107D5C00850BEA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
