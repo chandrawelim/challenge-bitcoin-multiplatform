@@ -47,6 +47,16 @@ final class RemoteBTCPriceLoaderTests: XCTestCase {
             }
         }
     }
+    
+    func test_load_deliversBTCPriceOn200HTTPResponseWithValidJSON() {
+        let (sut, client) = makeSUT()
+        let expectedPrice = BTCPrice(usd: Decimal(string: "45000.50")!, timestamp: Date(timeIntervalSince1970: 0))
+        let validJSON = Data("{\"symbol\":\"BTCUSDT\",\"price\":\"45000.50\"}".utf8)
+
+        expect(sut, toCompleteWith: .success(expectedPrice)) {
+            client.complete(withStatusCode: 200, data: validJSON)
+        }
+    }
 
     // MARK: - Helpers
 
@@ -59,7 +69,9 @@ final class RemoteBTCPriceLoaderTests: XCTestCase {
         let sut = RemoteBTCPriceLoader(
             url: url,
             client: client,
-            mapper: { data, response in try BinancePriceMapper.map(data, from: response) }
+            mapper: { data, response in
+                try BinancePriceMapper.map(data, from: response, currentDate: Date(timeIntervalSince1970: 0))
+            }
         )
         trackForMemoryLeaks(sut, file: file, line: line)
         trackForMemoryLeaks(client, file: file, line: line)
@@ -77,6 +89,8 @@ final class RemoteBTCPriceLoaderTests: XCTestCase {
 
         sut.load { receivedResult in
             switch (receivedResult, expectedResult) {
+            case let (.success(receivedPrice), .success(expectedPrice)):
+                XCTAssertEqual(receivedPrice, expectedPrice, file: file, line: line)
             case (.failure, .failure):
                 break
             default:
