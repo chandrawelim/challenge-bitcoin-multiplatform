@@ -35,6 +35,15 @@ final class FallbackBTCPriceLoaderTests: XCTestCase {
 
         XCTAssertEqual(fallback.loadCallCount, 0)
     }
+    
+    func test_load_deliversPrimaryResultOnPrimarySuccess() {
+        let (sut, primary, _) = makeSUT()
+        let expectedPrice = anyBTCPrice()
+
+        expect(sut, toCompleteWith: .success(expectedPrice)) {
+            primary.complete(with: .success(expectedPrice))
+        }
+    }
 
     // MARK: - Helpers
 
@@ -57,5 +66,30 @@ final class FallbackBTCPriceLoaderTests: XCTestCase {
 
     private func anyBTCPrice() -> BTCPrice {
         BTCPrice(usd: 1.0, timestamp: Date())
+    }
+    
+    private func expect(
+        _ sut: FallbackBTCPriceLoader,
+        toCompleteWith expectedResult: Result<BTCPrice, Error>,
+        when action: () -> Void,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        let exp = expectation(description: "Wait for load completion")
+
+        sut.load { receivedResult in
+            switch (receivedResult, expectedResult) {
+            case let (.success(receivedPrice), .success(expectedPrice)):
+                XCTAssertEqual(receivedPrice, expectedPrice, file: file, line: line)
+            case (.failure, .failure):
+                break
+            default:
+                XCTFail("Expected \(expectedResult), got \(receivedResult) instead", file: file, line: line)
+            }
+            exp.fulfill()
+        }
+
+        action()
+        wait(for: [exp], timeout: 1.0)
     }
 }
