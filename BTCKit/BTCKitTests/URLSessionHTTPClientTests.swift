@@ -47,6 +47,22 @@ final class URLSessionHTTPClientTests: XCTestCase {
         XCTAssertEqual((receivedError as NSError?)?.domain, requestError.domain)
         XCTAssertEqual((receivedError as NSError?)?.code, requestError.code)
     }
+    
+    func test_getFromURL_deliversDataAndResponseOnSuccess() {
+        let expectedData = anyData()
+        let expectedResponse = anyHTTPURLResponse()
+
+        let result = resultFor(data: expectedData, response: expectedResponse, error: nil)
+
+        switch result {
+        case let .success((receivedData, receivedResponse)):
+            XCTAssertEqual(receivedData, expectedData)
+            XCTAssertEqual(receivedResponse.url, expectedResponse.url)
+            XCTAssertEqual(receivedResponse.statusCode, expectedResponse.statusCode)
+        default:
+            XCTFail("Expected success, got \(result) instead")
+        }
+    }
 
     // MARK: - Helpers
 
@@ -68,6 +84,14 @@ final class URLSessionHTTPClientTests: XCTestCase {
     
     private func anyNSError() -> NSError {
         NSError(domain: "Test", code: 0)
+    }
+    
+    private func anyData() -> Data {
+        Data("any data".utf8)
+    }
+
+    private func anyHTTPURLResponse() -> HTTPURLResponse {
+        HTTPURLResponse(url: anyURL(), statusCode: 200, httpVersion: nil, headerFields: nil)!
     }
 
     private func resultErrorFor(
