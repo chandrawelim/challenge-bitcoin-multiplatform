@@ -44,6 +44,25 @@ final class FallbackBTCPriceLoaderTests: XCTestCase {
             primary.complete(with: .success(expectedPrice))
         }
     }
+    
+    func test_load_deliversFallbackResultOnPrimaryFailure() {
+        let (sut, primary, fallback) = makeSUT()
+        let expectedPrice = anyBTCPrice()
+
+        expect(sut, toCompleteWith: .success(expectedPrice)) {
+            primary.complete(with: .failure(anyNSError()))
+            fallback.complete(with: .success(expectedPrice))
+        }
+    }
+
+    func test_load_deliversFallbackErrorOnBothFailure() {
+        let (sut, primary, fallback) = makeSUT()
+
+        expect(sut, toCompleteWith: .failure(anyNSError())) {
+            primary.complete(with: .failure(anyNSError()))
+            fallback.complete(with: .failure(anyNSError()))
+        }
+    }
 
     // MARK: - Helpers
 
