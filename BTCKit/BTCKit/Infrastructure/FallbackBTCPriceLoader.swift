@@ -9,5 +9,7 @@ public final class FallbackBTCPriceLoader: BTCPriceLoader {
         self.fallback = fallback
     }
 
-    public func load(completion: @escaping (Result<BTCPrice, Error>) -> Void) {}
+    public func load(completion: @escaping (Result<BTCPrice, Error>) -> Void) {
+        primary.load(completion: completion)
+    }
 }

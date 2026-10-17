@@ -9,6 +9,14 @@ final class FallbackBTCPriceLoaderTests: XCTestCase {
         XCTAssertEqual(primary.loadCallCount, 0)
         XCTAssertEqual(fallback.loadCallCount, 0)
     }
+    
+    func test_load_loadsFromPrimary() {
+        let (sut, primary, _) = makeSUT()
+
+        sut.load { _ in }
+
+        XCTAssertEqual(primary.loadCallCount, 1)
+    }
 
     // MARK: - Helpers
 
