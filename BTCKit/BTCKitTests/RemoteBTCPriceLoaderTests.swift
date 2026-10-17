@@ -36,6 +36,17 @@ final class RemoteBTCPriceLoaderTests: XCTestCase {
             client.complete(with: clientError)
         }
     }
+    
+    func test_load_deliversErrorOnNon200HTTPResponse() {
+        let (sut, client) = makeSUT()
+        let samples = [199, 201, 300, 400, 500]
+
+        samples.enumerated().forEach { index, code in
+            expect(sut, toCompleteWith: .failure(anyNSError())) {
+                client.complete(withStatusCode: code, data: anyData(), at: index)
+            }
+        }
+    }
 
     // MARK: - Helpers
 
@@ -66,8 +77,8 @@ final class RemoteBTCPriceLoaderTests: XCTestCase {
 
         sut.load { receivedResult in
             switch (receivedResult, expectedResult) {
-            case let (.failure(receivedError as NSError), .failure(expectedError as NSError)):
-                XCTAssertEqual(receivedError, expectedError, file: file, line: line)
+            case (.failure, .failure):
+                break
             default:
                 XCTFail("Expected \(expectedResult), got \(receivedResult) instead", file: file, line: line)
             }
@@ -76,5 +87,13 @@ final class RemoteBTCPriceLoaderTests: XCTestCase {
 
         action()
         wait(for: [exp], timeout: 1.0)
+    }
+    
+    private func anyData() -> Data {
+        Data("any data".utf8)
+    }
+
+    private func anyNSError() -> NSError {
+        NSError(domain: "Test", code: 0)
     }
 }

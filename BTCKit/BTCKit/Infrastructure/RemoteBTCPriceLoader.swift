@@ -12,12 +12,13 @@ public final class RemoteBTCPriceLoader: BTCPriceLoader {
     }
     
     public func load(completion: @escaping (Result<BTCPrice, Error>) -> Void) {
-        client.get(from: url) { result in
+        client.get(from: url) { [weak self] result in
+            guard let self else { return }
             switch result {
+            case let .success((data, response)):
+                completion(Result { try self.mapper(data, response) })
             case let .failure(error):
                 completion(.failure(error))
-            default:
-                break
             }
         }
     }
