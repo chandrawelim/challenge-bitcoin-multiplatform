@@ -11,5 +11,7 @@ public final class RemoteBTCPriceLoader: BTCPriceLoader {
         self.mapper = mapper
     }
 
-    public func load(completion: @escaping (Result<BTCPrice, Error>) -> Void) {}
+    public func load(completion: @escaping (Result<BTCPrice, Error>) -> Void) {
+        client.get(from: url) { _ in }
+    }
 }
