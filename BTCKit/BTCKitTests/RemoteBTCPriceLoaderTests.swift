@@ -27,6 +27,15 @@ final class RemoteBTCPriceLoaderTests: XCTestCase {
 
         XCTAssertEqual(client.requestedURLs, [url, url])
     }
+    
+    func test_load_deliversErrorOnClientError() {
+        let (sut, client) = makeSUT()
+        let clientError = NSError(domain: "Test", code: 0)
+
+        expect(sut, toCompleteWith: .failure(clientError)) {
+            client.complete(with: clientError)
+        }
+    }
 
     // MARK: - Helpers
 
@@ -44,5 +53,28 @@ final class RemoteBTCPriceLoaderTests: XCTestCase {
         trackForMemoryLeaks(sut, file: file, line: line)
         trackForMemoryLeaks(client, file: file, line: line)
         return (sut, client)
+    }
+    
+    private func expect(
+        _ sut: RemoteBTCPriceLoader,
+        toCompleteWith expectedResult: Result<BTCPrice, Error>,
+        when action: () -> Void,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        let exp = expectation(description: "Wait for load completion")
+
+        sut.load { receivedResult in
+            switch (receivedResult, expectedResult) {
+            case let (.failure(receivedError as NSError), .failure(expectedError as NSError)):
+                XCTAssertEqual(receivedError, expectedError, file: file, line: line)
+            default:
+                XCTFail("Expected \(expectedResult), got \(receivedResult) instead", file: file, line: line)
+            }
+            exp.fulfill()
+        }
+
+        action()
+        wait(for: [exp], timeout: 1.0)
     }
 }
