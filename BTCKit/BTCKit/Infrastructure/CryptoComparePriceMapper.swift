@@ -19,10 +19,10 @@ public enum CryptoComparePriceMapper {
             throw Error.non200HTTPResponse
         }
 
-        guard (try? JSONDecoder().decode(Response.self, from: data)) != nil else {
+        guard let decoded = try? JSONDecoder().decode(Response.self, from: data) else {
             throw Error.invalidData
         }
 
-        return BTCPrice(usd: 0, timestamp: currentDate)
+        return BTCPrice(usd: decoded.RAW.PRICE, timestamp: currentDate)
     }
 }
