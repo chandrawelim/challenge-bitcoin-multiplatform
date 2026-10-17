@@ -8,6 +8,7 @@ final class URLProtocolStub: URLProtocol {
     }
 
     private static var stub: Stub?
+    private(set) static var cancelledRequests = [URLRequest]()
     static var requestObserver: ((URLRequest) -> Void)?
 
     static func stub(data: Data?, response: URLResponse?, error: Error?) {
@@ -21,6 +22,7 @@ final class URLProtocolStub: URLProtocol {
     static func removeStub() {
         stub = nil
         requestObserver = nil
+        cancelledRequests = []
     }
 
     override class func canInit(with request: URLRequest) -> Bool { true }
@@ -44,5 +46,9 @@ final class URLProtocolStub: URLProtocol {
         client?.urlProtocolDidFinishLoading(self)
     }
 
-    override func stopLoading() {}
+    override func stopLoading() {
+        if URLProtocolStub.requestObserver != nil {
+            URLProtocolStub.cancelledRequests.append(request)
+        }
+    }
 }

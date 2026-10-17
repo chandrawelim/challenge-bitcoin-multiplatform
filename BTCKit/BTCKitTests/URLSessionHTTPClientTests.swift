@@ -74,6 +74,18 @@ final class URLSessionHTTPClientTests: XCTestCase {
         XCTAssertNotNil(resultErrorFor(data: anyData(), response: anyHTTPURLResponse(),    error: anyNSError()))
     }
     
+    func test_cancelGetFromURLTask_cancelsURLRequest() {
+        let exp = expectation(description: "Wait for request")
+        URLProtocolStub.observeRequests { _ in exp.fulfill() }
+
+        let task = makeSUT().get(from: anyURL()) { _ in }
+        wait(for: [exp], timeout: 1.0)
+
+        task.cancel()
+
+        XCTAssertEqual(URLProtocolStub.cancelledRequests.count, 1)
+    }
+    
     // MARK: - Helpers
 
     private func makeSUT(
