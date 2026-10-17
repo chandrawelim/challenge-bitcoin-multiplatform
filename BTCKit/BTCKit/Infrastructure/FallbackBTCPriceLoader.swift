@@ -1,0 +1,13 @@
+import Foundation
+
+public final class FallbackBTCPriceLoader: BTCPriceLoader {
+    private let primary: BTCPriceLoader
+    private let fallback: BTCPriceLoader
+
+    public init(primary: BTCPriceLoader, fallback: BTCPriceLoader) {
+        self.primary = primary
+        self.fallback = fallback
+    }
+
+    public func load(completion: @escaping (Result<BTCPrice, Error>) -> Void) {}
+}
