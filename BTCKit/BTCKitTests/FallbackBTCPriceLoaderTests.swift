@@ -17,6 +17,24 @@ final class FallbackBTCPriceLoaderTests: XCTestCase {
 
         XCTAssertEqual(primary.loadCallCount, 1)
     }
+    
+    func test_load_loadsFromFallbackOnPrimaryFailure() {
+        let (sut, primary, fallback) = makeSUT()
+
+        sut.load { _ in }
+        primary.complete(with: .failure(anyNSError()))
+
+        XCTAssertEqual(fallback.loadCallCount, 1)
+    }
+
+    func test_load_doesNotLoadFromFallbackOnPrimarySuccess() {
+        let (sut, primary, fallback) = makeSUT()
+
+        sut.load { _ in }
+        primary.complete(with: .success(anyBTCPrice()))
+
+        XCTAssertEqual(fallback.loadCallCount, 0)
+    }
 
     // MARK: - Helpers
 
@@ -31,5 +49,13 @@ final class FallbackBTCPriceLoaderTests: XCTestCase {
         trackForMemoryLeaks(primary, file: file, line: line)
         trackForMemoryLeaks(fallback, file: file, line: line)
         return (sut, primary, fallback)
+    }
+    
+    private func anyNSError() -> NSError {
+        NSError(domain: "Test", code: 0)
+    }
+
+    private func anyBTCPrice() -> BTCPrice {
+        BTCPrice(usd: 1.0, timestamp: Date())
     }
 }

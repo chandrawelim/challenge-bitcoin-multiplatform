@@ -10,6 +10,13 @@ public final class FallbackBTCPriceLoader: BTCPriceLoader {
     }
 
     public func load(completion: @escaping (Result<BTCPrice, Error>) -> Void) {
-        primary.load(completion: completion)
+        primary.load { [weak self] result in
+            switch result {
+            case .success:
+                completion(result)
+            case .failure:
+                self?.fallback.load(completion: completion)
+            }
+        }
     }
 }
