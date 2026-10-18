@@ -41,7 +41,7 @@ final class BTCPriceLoaderAcceptanceTests: XCTestCase {
         FallbackBTCPriceLoader(
             primary: makePrimaryLoader(client: primaryClient),
             fallback: RemoteBTCPriceLoader(
-                url: URL(string: "https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=USD")!,
+                url: URL(string: "https://min-api.cryptocompare.com/data/generateAvg?fsym=BTC&tsym=USD&e=coinbase")!,
                 client: fallbackClient,
                 mapper: { data, response in try CryptoComparePriceMapper.map(data, from: response) }
             )
