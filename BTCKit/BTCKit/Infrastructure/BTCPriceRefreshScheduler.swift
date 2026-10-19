@@ -12,7 +12,12 @@ public final class BTCPriceRefreshScheduler {
     }
 
     public func startRefreshing(completion: @escaping (Result<BTCPrice, Error>) -> Void) {
-        loader.load(completion: completion)
+        loader.load { [weak self] result in
+            completion(result)
+            self?.scheduler(1.0) { [weak self] in
+                self?.startRefreshing(completion: completion)
+            }
+        }
     }
 
     public func stopRefreshing() {}
