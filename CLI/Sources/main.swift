@@ -16,18 +16,36 @@ let loader = FallbackBTCPriceLoader(
     )
 )
 
-print("Fetching BTC price...")
-
-let semaphore = DispatchSemaphore(value: 0)
-
-loader.load { result in
-    switch result {
-    case let .success(price):
-        print("BTC/USD: $\(price.usd)")
-    case let .failure(error):
-        print("Failed: \(error.localizedDescription)")
+final class CLIView: BTCPriceView {
+    func display(_ viewModel: BTCPriceDisplayModel) {
+        if let error = viewModel.errorMessage {
+            print(error)
+        } else if !viewModel.isLoading {
+            print("BTC/USD: \(viewModel.price)")
+        }
     }
-    semaphore.signal()
 }
 
-semaphore.wait()
+let view = CLIView()
+let presenter = BTCPricePresenter(view: view)
+
+let scheduler = BTCPriceRefreshScheduler(loader: loader) { interval, block in
+    DispatchQueue.global().asyncAfter(deadline: .now() + interval, execute: block)
+}
+
+scheduler.startRefreshing { result in
+    switch result {
+    case let .success(price):
+        DispatchQueue.main.async { presenter.didStartLoading() }
+        DispatchQueue.main.async { presenter.didFinishLoading(with: price) }
+    case let .failure(error):
+        DispatchQueue.main.async { presenter.didFinishLoading(with: error) }
+    }
+}
+
+signal(SIGINT) { _ in
+    print("\nStopped.")
+    exit(0)
+}
+
+RunLoop.main.run()
