@@ -3,20 +3,22 @@ version: 2.1
 jobs:
   test-btckit:
     macos:
-      xcode: "16.2.0"
+      xcode: "26.2.0"
     resource_class: m4pro.medium
     steps:
       - checkout
       - run:
-          name: Build and test BTCKit
+          name: Resolve Swift packages
+          command: swift package resolve
+      - run:
+          name: Run unit tests
           command: |
-            xcodebuild clean build test \
-              -project BTCKit/BTCKit.xcodeproj \
-              -scheme BTCKit \
-              -destination "platform=macOS" \
-              CODE_SIGN_IDENTITY="" \
-              CODE_SIGNING_REQUIRED=NO \
-              ONLY_ACTIVE_ARCH=YES
+            swift test \
+              --xunit-output test-results.xml
+      - store_test_results:
+          path: test-results.xml
+      - store_artifacts:
+          path: test-results.xml
 
   build-cli:
     docker:
@@ -32,6 +34,4 @@ workflows:
   ci:
     jobs:
       - test-btckit
-      - build-cli:
-          requires:
-            - test-btckit
+      - build-cli
