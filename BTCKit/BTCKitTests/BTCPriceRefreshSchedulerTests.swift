@@ -39,6 +39,29 @@ final class BTCPriceRefreshSchedulerTests: XCTestCase {
 
         XCTAssertEqual(loader.loadCallCount, 1)
     }
+    
+    func test_stopRefreshing_doesNotScheduleNextLoadAfterStop() {
+        let (sut, loader) = makeSUT()
+
+        sut.startRefreshing { _ in }
+        loader.complete(with: .failure(anyNSError()))
+        sut.stopRefreshing()
+
+        triggerScheduledBlock()
+
+        XCTAssertEqual(loader.loadCallCount, 1)
+    }
+
+    func test_stopRefreshing_doesNotDeliverResultAfterStop() {
+        let (sut, loader) = makeSUT()
+        var receivedResults = [Result<BTCPrice, Error>]()
+
+        sut.startRefreshing { receivedResults.append($0) }
+        sut.stopRefreshing()
+        loader.complete(with: .failure(anyNSError()))
+
+        XCTAssertTrue(receivedResults.isEmpty)
+    }
 
     // MARK: - Helpers
 
