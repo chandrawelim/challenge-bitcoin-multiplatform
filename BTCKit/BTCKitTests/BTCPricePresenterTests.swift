@@ -65,6 +65,20 @@ final class BTCPricePresenterTests: XCTestCase {
             isLoading: false
         ))
     }
+    
+    func test_didStartLoading_rendersLastKnownPriceWhileLoading() {
+        let (sut, view) = makeSUT()
+        let price = BTCPrice(usd: Decimal(string: "45000.50")!, timestamp: Date())
+
+        sut.didFinishLoading(with: price)
+        sut.didStartLoading()
+
+        XCTAssertEqual(view.messages.last, BTCPriceDisplayModel(
+            price: "$45,000.50",
+            errorMessage: nil,
+            isLoading: true
+        ))
+    }
 
     // MARK: - Helpers
 
