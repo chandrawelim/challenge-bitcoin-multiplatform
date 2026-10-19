@@ -8,6 +8,14 @@ final class BTCPriceRefreshSchedulerTests: XCTestCase {
 
         XCTAssertEqual(loader.loadCallCount, 0)
     }
+    
+    func test_startRefreshing_loadsImmediately() {
+        let (sut, loader) = makeSUT()
+
+        sut.startRefreshing { _ in }
+
+        XCTAssertEqual(loader.loadCallCount, 1)
+    }
 
     // MARK: - Helpers
 

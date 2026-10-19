@@ -11,7 +11,9 @@ public final class BTCPriceRefreshScheduler {
         self.scheduler = scheduler
     }
 
-    public func startRefreshing(completion: @escaping (Result<BTCPrice, Error>) -> Void) {}
+    public func startRefreshing(completion: @escaping (Result<BTCPrice, Error>) -> Void) {
+        loader.load(completion: completion)
+    }
 
     public func stopRefreshing() {}
 }
