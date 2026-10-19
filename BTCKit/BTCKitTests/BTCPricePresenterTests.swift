@@ -18,6 +18,27 @@ final class BTCPricePresenterTests: XCTestCase {
             BTCPriceDisplayModel(price: "--", errorMessage: nil, isLoading: true)
         ])
     }
+    
+    func test_didFinishLoadingWithPrice_rendersFormattedPrice() {
+        let (sut, view) = makeSUT()
+        let price = BTCPrice(usd: Decimal(string: "45000.50")!, timestamp: Date())
+
+        sut.didFinishLoading(with: price)
+
+        XCTAssertEqual(view.messages, [
+            BTCPriceDisplayModel(price: "$45,000.50", errorMessage: nil, isLoading: false)
+        ])
+    }
+
+    func test_didFinishLoadingWithPrice_hidesErrorMessage() {
+        let (sut, view) = makeSUT()
+        let price = BTCPrice(usd: Decimal(string: "45000.50")!, timestamp: Date())
+
+        sut.didFinishLoading(with: anyNSError())
+        sut.didFinishLoading(with: price)
+
+        XCTAssertNil(view.messages.last?.errorMessage)
+    }
 
     // MARK: - Helpers
 
@@ -30,6 +51,10 @@ final class BTCPricePresenterTests: XCTestCase {
         trackForMemoryLeaks(sut, file: file, line: line)
         trackForMemoryLeaks(view, file: file, line: line)
         return (sut, view)
+    }
+    
+    private func anyNSError() -> NSError {
+        NSError(domain: "Test", code: 0)
     }
 
     private final class BTCPriceViewSpy: BTCPriceView {
