@@ -4,6 +4,7 @@ jobs:
   test-btckit:
     macos:
       xcode: "16.2.0"
+    resource_class: macos.m1.medium.gen1
     steps:
       - checkout
       - run:
@@ -18,8 +19,8 @@ jobs:
               ONLY_ACTIVE_ARCH=YES
 
   build-cli:
-    macos:
-      xcode: "16.2.0"
+    docker:
+      - image: swift:5.9
     steps:
       - checkout
       - run:
