@@ -8,6 +8,16 @@ final class BTCPricePresenterTests: XCTestCase {
 
         XCTAssertTrue(view.messages.isEmpty)
     }
+    
+    func test_didStartLoading_rendersLoadingState() {
+        let (sut, view) = makeSUT()
+
+        sut.didStartLoading()
+
+        XCTAssertEqual(view.messages, [
+            BTCPriceDisplayModel(price: "--", errorMessage: nil, isLoading: true)
+        ])
+    }
 
     // MARK: - Helpers
 

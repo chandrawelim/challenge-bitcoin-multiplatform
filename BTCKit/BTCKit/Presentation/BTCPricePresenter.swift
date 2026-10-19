@@ -23,7 +23,10 @@ public final class BTCPricePresenter {
         self.view = view
     }
 
-    public func didStartLoading() {}
+    public func didStartLoading() {
+        view?.display(BTCPriceDisplayModel(price: "--", errorMessage: nil, isLoading: true))
+    }
+    
     public func didFinishLoading(with price: BTCPrice) {}
     public func didFinishLoading(with error: Error) {}
 }
