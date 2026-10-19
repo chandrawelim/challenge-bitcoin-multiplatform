@@ -1,4 +1,7 @@
 import XCTest
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 import BTCKit
 
 final class CryptoComparePriceMapperTests: XCTestCase {
