@@ -2,19 +2,13 @@ version: 2.1
 
 jobs:
   test-btckit:
-    macos:
-      xcode: "26.2.0"
-    resource_class: m4pro.medium
+    docker:
+      - image: swift:5.9
     steps:
       - checkout
       - run:
-          name: Resolve Swift packages
-          command: swift package resolve
-      - run:
           name: Run unit tests
-          command: |
-            swift test \
-              --xunit-output test-results.xml
+          command: swift test --xunit-output test-results.xml
       - store_test_results:
           path: test-results.xml
       - store_artifacts:
