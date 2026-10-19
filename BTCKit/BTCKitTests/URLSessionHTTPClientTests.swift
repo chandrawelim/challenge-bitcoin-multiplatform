@@ -77,7 +77,11 @@ final class URLSessionHTTPClientTests: XCTestCase {
         XCTAssertNotNil(resultErrorFor(data: anyData(), response: anyHTTPURLResponse(),    error: anyNSError()))
     }
     
-    func test_cancelGetFromURLTask_cancelsURLRequest() {
+    func test_cancelGetFromURLTask_cancelsURLRequest() throws {
+        #if !canImport(Darwin)
+        throw XCTSkip("URLProtocol cancellation not reliably observable on Linux FoundationNetworking")
+        #endif
+
         let exp = expectation(description: "Wait for request")
         URLProtocolStub.observeRequests { _ in exp.fulfill() }
 
