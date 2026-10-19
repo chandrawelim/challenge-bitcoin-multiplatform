@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 public final class RemoteBTCPriceLoader: BTCPriceLoader {
     private let url: URL
