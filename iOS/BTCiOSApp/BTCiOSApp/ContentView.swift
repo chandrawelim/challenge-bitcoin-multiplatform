@@ -13,33 +13,24 @@ struct ContentView: View {
             Text("Bitcoin Price")
                 .font(.largeTitle.bold())
 
+            Text(viewModel.price)
+                .font(.system(size: 48, weight: .semibold, design: .rounded))
+                .foregroundColor(.orange)
+
             if viewModel.isLoading {
                 ProgressView()
-                    .scaleEffect(1.5)
-            } else {
-                Text(viewModel.price)
-                    .font(.system(size: 48, weight: .semibold, design: .rounded))
-                    .foregroundColor(.orange)
-
-                if let error = viewModel.errorMessage {
-                    Text(error)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                }
             }
 
-            Button {
-                viewModel.load()
-            } label: {
-                Label("Refresh", systemImage: "arrow.clockwise")
-                    .frame(maxWidth: .infinity)
+            if let error = viewModel.errorMessage {
+                Text(error)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
             }
-            .buttonStyle(.borderedProminent)
-            .tint(.orange)
-            .disabled(viewModel.isLoading)
         }
         .padding(32)
-        .onAppear { viewModel.load() }
+        .onAppear { viewModel.start() }
+        .onDisappear { viewModel.stop() }
     }
 }
